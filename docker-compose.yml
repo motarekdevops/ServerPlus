@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  serverpulse:
+    build: .
+    container_name: serverpulse
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./database:/var/www/html/database
+    environment:
+      - APP_ENV=local
+      - DB_CONNECTION=sqlite
+    stdin_open: true
+    tty: true
