@@ -15,7 +15,7 @@ php artisan migrate --force
 
 php artisan make:filament-user \
     --name="Admin" \
-    --email="admin@serverpulse.local" \
+    --email="admin@serverplus.local" \
     --password="password" \
     --no-interaction || true
 

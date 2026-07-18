@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  serverpulse:
+  serverplus:
     build: .
-    container_name: serverpulse
+    container_name: serverplus
     ports:
       - "8000:8000"
     volumes:

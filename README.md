@@ -1,8 +1,16 @@
-# ServerPulse
+<p align="center">
+  <img src=".github/assets/logo.png" alt="ServerPlus logo" width="300"/>
+</p>
+
+<p align="center">
+  <img src=".github/assets/logo.png" alt="ServerPlus logo" width="300"/>
+</p>
+
+# ServerPlus
 
 **Free, open-source, agentless infrastructure monitoring for DevOps engineers.**
 
-ServerPulse lets you monitor your Linux servers over SSH — no agents to install, no accounts to create, no data leaving your machine. Every engineer runs their own private instance, connects it to their own servers, and gets real-time health monitoring with alerts sent straight to their own email or Telegram.
+ServerPlus lets you monitor your Linux servers over SSH — no agents to install, no accounts to create, no data leaving your machine. Every engineer runs their own private instance, connects it to their own servers, and gets real-time health monitoring with alerts sent straight to their own email or Telegram.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4.svg)
@@ -10,7 +18,7 @@ ServerPulse lets you monitor your Linux servers over SSH — no agents to instal
 
 ---
 
-## Why ServerPulse?
+## Why ServerPlus?
 
 - **Agentless.** Connects over SSH — nothing to install on the servers you monitor.
 - **Private by design.** Runs entirely on your own machine. Your server credentials never leave your computer.
@@ -49,7 +57,7 @@ ServerPulse lets you monitor your Linux servers over SSH — no agents to instal
 
 ## Quick Start (Docker — Recommended)
 
-The fastest way to get ServerPulse running. Docker builds the app, runs migrations, creates an admin user, and starts everything for you.
+The fastest way to get ServerPlus running. Docker builds the app, runs migrations, creates an admin user, and starts everything for you.
 
 ### Prerequisites
 
@@ -72,7 +80,7 @@ This will:
 
 Once it's up, log in at **http://localhost:8000/admin** with:
 
-- **Email:** `admin@serverpulse.local`
+- **Email:** `admin@serverplus.local`
 - **Password:** `password`
 
 > ⚠️ Change this password immediately after your first login.

@@ -21,7 +21,7 @@ class AlertDispatcher
         }
 
         if ($setting->telegram_enabled) {
-            $message = "🔴 <b>ServerPulse Alert</b>\n\n"
+            $message = "🔴 <b>ServerPlus Alert</b>\n\n"
                 . "Server: {$alert->server->name}\n"
                 . "Host: {$alert->server->host}\n"
                 . "Rule: {$alert->rule_triggered}\n"

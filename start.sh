@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 Starting ServerPulse..."
+echo "🚀 Starting ServerPlus..."
 docker compose up -d --build
 
 echo "⏳ Waiting for app to be ready..."
@@ -8,7 +8,7 @@ until curl -s http://localhost:8000/admin/login > /dev/null; do
     sleep 1
 done
 
-echo "✅ ServerPulse is ready!"
+echo "✅ ServerPlus is ready!"
 
 if which xdg-open > /dev/null; then
     xdg-open http://localhost:8000/admin/login

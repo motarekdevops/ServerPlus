@@ -21,7 +21,7 @@ class ServerAlertNotification extends Notification
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('🔴 ServerPulse Alert: ' . $this->alert->rule_triggered)
+            ->subject('🔴 ServerPlus Alert: ' . $this->alert->rule_triggered)
             ->greeting('Server Alert Triggered')
             ->line($this->alert->message)
             ->line('Server: ' . $this->alert->server->name)
