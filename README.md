@@ -6,6 +6,10 @@
   <img src=".github/assets/logo.png" alt="ServerPlus logo" width="300"/>
 </p>
 
+<p align="center">
+  <img src=".github/assets/logo.png" alt="ServerPlus logo" width="300"/>
+</p>
+
 # ServerPlus
 
 **Free, open-source, agentless infrastructure monitoring for DevOps engineers.**
