@@ -99,7 +99,8 @@ class ServerResource extends Resource
                         'online' => 'success',
                         'offline' => 'danger',
                         default => 'gray',
-                    }),
+                    })
+                    ->tooltip(fn ($record) => $record->last_error),
 
                 Tables\Columns\TextColumn::make('last_checked_at')
                     ->label('Last Checked')
@@ -120,8 +121,29 @@ class ServerResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+Tables\Actions\Action::make('test_connection')
+                    ->label('Test Connection')
+                    ->icon('heroicon-o-signal')
+                    ->color('info')
+                    ->action(function ($record) {
+                        $sshService = app(\App\Services\SshService::class);
+                        try {
+                            $sshService->connect($record);
+                            $record->update(['status' => 'online', 'last_error' => null, 'last_checked_at' => now()]);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Connection successful')
+                                ->success()
+                                ->send();
+                        } catch (\Throwable $e) {
+                            $record->update(['status' => 'offline', 'last_error' => $e->getMessage()]);
+                            \Filament\Notifications\Notification::make()
+                                ->title('Connection failed')
+                                ->body($e->getMessage())
+                                ->danger()
+                                ->send();
+                        }
+                    }),
+                Tables\Actions\EditAction::make(),                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

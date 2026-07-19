@@ -8,20 +8,28 @@ use phpseclib3\Crypt\PublicKeyLoader;
 
 class SshService
 {
-    public function connect(Server $server): SSH2|false
+    /**
+     * @throws \Exception
+     */
+    public function connect(Server $server): SSH2
     {
+        $ssh = new SSH2($server->host, $server->port);
+        $ssh->setTimeout(10);
+
         try {
-            $ssh = new SSH2($server->host, $server->port);
             $key = PublicKeyLoader::load($server->private_key);
-
-            if (! $ssh->login($server->username, $key)) {
-                return false;
-            }
-
-            return $ssh;
         } catch (\Throwable $e) {
-            return false;
+            throw new \Exception("Invalid private key format: {$e->getMessage()}");
         }
+
+        if (! $ssh->login($server->username, $key)) {
+            $lastError = $ssh->getLastError();
+            throw new \Exception(
+                $lastError ? "Authentication failed: {$lastError}" : "Authentication failed: invalid credentials or unreachable host"
+            );
+        }
+
+        return $ssh;
     }
 
     public function getCpuUsage(SSH2 $ssh): float

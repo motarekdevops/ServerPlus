@@ -8,7 +8,7 @@ class Server extends Model
 {
     protected $fillable = [
         'name', 'host', 'port', 'username', 'private_key',
-        'group', 'status', 'last_checked_at',
+        'group', 'status', 'last_checked_at', 'last_error',
     ];
 
     protected $casts = [

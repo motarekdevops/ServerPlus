@@ -1,4 +1,3 @@
-
 services:
   serverplus:
     build: .
@@ -7,6 +6,7 @@ services:
       - "8000:8000"
     volumes:
       - ./database:/var/www/html/database
+      - ./.env:/var/www/html/.env
     environment:
       - APP_ENV=local
       - DB_CONNECTION=sqlite

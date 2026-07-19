@@ -18,30 +18,41 @@ class CheckServerJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    // Minimum minutes between repeated alerts for the same check
+    protected int $alertCooldownMinutes = 30;
+
     public function __construct(public Server $server) {}
 
     public function handle(SshService $sshService, CheckEngine $engine, AlertDispatcher $alertDispatcher): void
     {
-        $ssh = $sshService->connect($this->server);
-
-        if (! $ssh) {
-            $this->server->update(['status' => 'offline']);
+        try {
+            $ssh = $sshService->connect($this->server);
+        } catch (\Throwable $e) {
+            $this->server->update([
+                'status' => 'offline',
+                'last_error' => $e->getMessage(),
+            ]);
             return;
         }
 
         $this->server->update([
             'status' => 'online',
+            'last_error' => null,
             'last_checked_at' => now(),
         ]);
 
         foreach ($this->server->checks()->where('is_active', true)->get() as $check) {
-            $value = match ($check->type) {
-                'cpu' => $sshService->getCpuUsage($ssh),
-                'ram' => $sshService->getRamUsage($ssh),
-                'disk' => $sshService->getDiskUsage($ssh),
-                'uptime' => $sshService->getUptime($ssh),
-                default => 0,
-            };
+            try {
+                $value = match ($check->type) {
+                    'cpu' => $sshService->getCpuUsage($ssh),
+                    'ram' => $sshService->getRamUsage($ssh),
+                    'disk' => $sshService->getDiskUsage($ssh),
+                    'uptime' => $sshService->getUptime($ssh),
+                    default => 0,
+                };
+            } catch (\Throwable $e) {
+                continue;
+            }
 
             $status = $engine->evaluate($check->type, $value, $check->warning_threshold, $check->critical_threshold);
 
@@ -52,13 +63,25 @@ class CheckServerJob implements ShouldQueue
             ]);
 
             if ($status === 'critical') {
-                $alert = Alert::create([
-                    'server_id' => $this->server->id,
-                    'rule_triggered' => "{$check->type} exceeded critical threshold",
-                    'message' => "{$check->type} is at {$value}% on {$this->server->name}",
-                ]);
+                $onCooldown = $check->last_alerted_at
+                    && $check->last_alerted_at->diffInMinutes(now()) < $this->alertCooldownMinutes;
 
-                $alertDispatcher->dispatch($alert);
+                if (! $onCooldown) {
+                    $alert = Alert::create([
+                        'server_id' => $this->server->id,
+                        'rule_triggered' => "{$check->type} exceeded critical threshold",
+                        'message' => "{$check->type} is at {$value}% on {$this->server->name}",
+                    ]);
+
+                    $alertDispatcher->dispatch($alert);
+
+                    $check->update(['last_alerted_at' => now()]);
+                }
+            } else {
+                // Reset cooldown once the check recovers, so a new incident alerts immediately
+                if ($check->last_alerted_at !== null) {
+                    $check->update(['last_alerted_at' => null]);
+                }
             }
         }
     }

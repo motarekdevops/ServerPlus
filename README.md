@@ -8,6 +8,7 @@
 ServerPlus lets you monitor your Linux servers over SSH — no agents to install, no accounts to create, no data leaving your machine. Every engineer runs their own private instance, connects it to their own servers, and gets real-time health monitoring with alerts sent straight to their own email or Telegram.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Tests](https://github.com/motarekdevops/ServerPlus/actions/workflows/tests.yml/badge.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4.svg)
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20.svg)
 
