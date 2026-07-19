@@ -25,12 +25,13 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('server-plus-dashboard')
+            ->favicon(asset('favicon.png'))
             ->login()
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->brandName('ServerPulse')
+            ->brandName('Server Plus')
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('9rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
