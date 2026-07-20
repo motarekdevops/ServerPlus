@@ -143,7 +143,9 @@ Tables\Actions\Action::make('test_connection')
                                 ->send();
                         }
                     }),
-                Tables\Actions\EditAction::make(),                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -165,7 +167,9 @@ Tables\Actions\Action::make('test_connection')
         return [
             'index' => Pages\ListServers::route('/'),
             'create' => Pages\CreateServer::route('/create'),
+            'view' => Pages\ViewServer::route('/{record}'),
             'edit' => Pages\EditServer::route('/{record}/edit'),
         ];
     }
 }
+

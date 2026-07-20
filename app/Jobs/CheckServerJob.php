@@ -18,7 +18,6 @@ class CheckServerJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // Minimum minutes between repeated alerts for the same check
     protected int $alertCooldownMinutes = 30;
 
     public function __construct(public Server $server) {}
@@ -28,10 +27,25 @@ class CheckServerJob implements ShouldQueue
         try {
             $ssh = $sshService->connect($this->server);
         } catch (\Throwable $e) {
+            $wasOnline = $this->server->status !== 'offline';
+
             $this->server->update([
                 'status' => 'offline',
                 'last_error' => $e->getMessage(),
             ]);
+
+            if ($wasOnline) {
+                for ($i = 0; $i < 3; $i++) {
+                    $alert = Alert::create([
+                        'server_id' => $this->server->id,
+                        'rule_triggered' => 'Server Is Down',
+                        'message' => "🔴 {$this->server->name} ({$this->server->host}) is unreachable. Error: {$e->getMessage()}",
+                    ]);
+
+                    $alertDispatcher->dispatch($alert);
+                }
+            }
+
             return;
         }
 
@@ -78,7 +92,6 @@ class CheckServerJob implements ShouldQueue
                     $check->update(['last_alerted_at' => now()]);
                 }
             } else {
-                // Reset cooldown once the check recovers, so a new incident alerts immediately
                 if ($check->last_alerted_at !== null) {
                     $check->update(['last_alerted_at' => null]);
                 }

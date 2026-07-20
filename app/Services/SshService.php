@@ -55,4 +55,11 @@ class SshService
         $output = $ssh->exec("cat /proc/uptime | awk '{print \$1}'");
         return (float) trim($output);
     }
+
+    public function getAvailableUpdates(SSH2 $ssh): int
+    {
+        // Works on Debian/Ubuntu systems. Returns 0 on other distros or failure.
+        $output = $ssh->exec("apt list --upgradable 2>/dev/null | grep -c upgradable");
+        return (int) trim($output);
+    }
 }

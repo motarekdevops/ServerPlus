@@ -6,4 +6,4 @@ Schedule::call(function () {
     Server::query()->each(function ($server) {
         CheckServerJob::dispatch($server);
     });
-})->everyFiveMinutes();
+})->everyMinute();
