@@ -104,7 +104,6 @@ class AlertResource extends Resource
     {
         return [
             'index' => Pages\ListAlerts::route('/'),
-            'create' => Pages\CreateAlert::route('/create'),
             'edit' => Pages\EditAlert::route('/{record}/edit'),
         ];
     }
