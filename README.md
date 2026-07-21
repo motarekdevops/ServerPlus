@@ -161,6 +161,20 @@ Visit **http://localhost:8000/admin** and log in with the account you created.
 
 ---
 
+## SSL Certificate Monitoring
+
+ServerPlus can track SSL certificate expiry for any domain and warn you before it lapses.
+
+1. Open a server, go to its **Checks** tab, and add a new check with **Type = SSL**.
+2. Enter the **domain** you want to monitor (e.g. `example.com`).
+3. Set **Alert Days Before** — how many days before expiry you want to be warned (e.g. `15`). Once the certificate has fewer days remaining than this, a banner appears at the top of the dashboard.
+4. If you've connected Telegram, you'll also get a message when the certificate crosses your threshold.
+5. When it's time to renew, click **Renew Certificate** on the check. ServerPlus will detect your web server (Nginx/Apache), run `certbot renew` over SSH, and immediately re-check the certificate — the dashboard banner clears as soon as the renewal succeeds, no need to wait for the next scheduled check.
+
+> If the domain isn't managed locally on the server (e.g. it's behind a hosting provider or reverse proxy), ServerPlus will tell you it couldn't detect a local web server config, and you'll need to renew it manually there.
+
+---
+
 ## Configuring Alerts
 
 Go to **Admin Panel → Alert Settings** to configure how you want to be notified:
