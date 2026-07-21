@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Server extends Model
 {
     protected $fillable = [
-        'name', 'host', 'port', 'username', 'private_key',
+        'name', 'host', 'domain', 'port', 'username', 'private_key',
         'group', 'status', 'last_checked_at', 'last_error',
     ];
 

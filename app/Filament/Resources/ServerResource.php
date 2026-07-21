@@ -34,6 +34,11 @@ class ServerResource extends Resource
                             ->required()
                             ->maxLength(255),
 
+                        Forms\Components\TextInput::make('domain')
+                            ->label('Domain (optional, for SSL monitoring)')
+                            ->placeholder('example.com')
+                            ->maxLength(255),
+
                         Forms\Components\TextInput::make('port')
                             ->numeric()
                             ->required()
