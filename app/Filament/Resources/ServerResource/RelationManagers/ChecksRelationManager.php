@@ -190,6 +190,28 @@ class ChecksRelationManager extends RelationManager
 
                             $record->update(['ssl_last_renewed_at' => now()]);
 
+                            // Re-check the certificate immediately so the dashboard reflects
+                            // the new expiry date right away, instead of waiting for the
+                            // next scheduled check.
+                            try {
+                                $details = $sshService->getSslCertificateDetails($ssh, $record->domain);
+
+                                $record->update([
+                                    'ssl_issued_at' => $details['issued_at'],
+                                    'ssl_expires_at' => $details['expires_at'],
+                                ]);
+
+                                \App\Models\CheckResult::create([
+                                    'server_check_id' => $record->id,
+                                    'value' => $details['days_remaining'],
+                                    'status' => 'ok',
+                                ]);
+
+                                $record->update(['last_alerted_at' => null]);
+                            } catch (\Throwable $e) {
+                                // Renewal succeeded; the immediate re-check is best-effort.
+                            }
+
                             Notification::make()
                                 ->title('Certificate renewal executed')
                                 ->body(str($output)->limit(200))
