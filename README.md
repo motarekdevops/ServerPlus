@@ -29,6 +29,7 @@ ServerPlus lets you monitor your Linux servers over SSH — no agents to install
 
 - 🖥️ **Server management** — add, edit, group, and remove servers from a clean admin panel
 - 📊 **Live health checks** — CPU, RAM, disk, and uptime monitored on a schedule
+- 🔒 **SSL certificate monitoring** — tracks expiry per domain, with an inline dashboard banner when a certificate is nearing its threshold
 - 🚦 **Visual health indicators** — instant 🟢 Healthy / 🟡 Warning / 🔴 Critical / ⚫ Offline status
 - 🔔 **Alerting** — configurable warning/critical thresholds per check, with email and Telegram delivery
 - 📜 **Alert history** — full log of triggered alerts, with the ability to mark them resolved
@@ -154,7 +155,7 @@ Visit **http://localhost:8000/admin** and log in with the account you created.
 1. **Add a server** — provide a host, SSH username, and private key through the admin panel. Choose which checks to run (CPU, RAM, disk, uptime).
 2. **Scheduler runs every 5 minutes** — dispatches a background job for each server.
 3. **Job connects over SSH** — pulls live metrics using standard Linux commands (`top`, `free`, `df`, `/proc/uptime`).
-4. **Check engine evaluates the result** — compares it against your warning/critical thresholds.
+4. **Check engine evaluates the result** — compares it against your warning/critical thresholds (for SSL, fewer days remaining means worse status).
 5. **Alerts fire on critical status** — a record is saved, and a notification is sent via email and/or Telegram, based on your settings.
 6. **Dashboard updates live** — the admin panel shows real-time server health with color-coded indicators.
 
@@ -181,7 +182,6 @@ Go to **Admin Panel → Alert Settings** to configure how you want to be notifie
 
 - [ ] Intrusion / attack detection (failed login analysis, suspicious command patterns)
 - [ ] Docker container monitoring
-- [ ] SSL certificate expiry checks
 - [ ] Multi-user support with role-based access
 
 ---
