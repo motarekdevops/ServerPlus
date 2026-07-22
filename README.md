@@ -40,6 +40,7 @@ ServerPlus lets you monitor your Linux servers over SSH — no agents to install
 
 ## Screenshots
 
+<img width="1424" height="752" alt="Post 2" src="https://github.com/user-attachments/assets/cc378da8-40a6-4def-a5c9-a6aac3cdea76" />
 
 
 <p align="center">
